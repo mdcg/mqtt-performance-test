@@ -1,3 +1,4 @@
+import random
 from time import sleep
 
 from src.application.services.publisher import Publisher
@@ -13,7 +14,7 @@ def main():
     try:
         while True:
             sleep(1)
-            for i in range(999):
+            for i in range(random.randrange(500, 999)):
                 pub.publish(f"Hello, {i}")
     except KeyboardInterrupt:
         pub.stop()
