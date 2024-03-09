@@ -1,4 +1,3 @@
-import time
 from typing import Optional
 
 from src.domain.entities.metrics.parameters.time_series_data import TimeSeriesData
@@ -6,6 +5,7 @@ from src.domain.entities.mqtt.parameters.mqtt_on_connect import MQTTOnConnect
 from src.domain.entities.mqtt.parameters.mqtt_on_message import MQTTOnMessage
 from src.domain.interfaces.metrics.time_series_database import TimeSeriesDatabase
 from src.domain.interfaces.mqtt.mqtt_subscriber import MQTTSubscriber
+from src.infrastructure.common.time_measurement import TimeMeasurement
 from src.infrastructure.logging import Logger
 from src.infrastructure.metrics.influxdb import InfluxDB
 from src.infrastructure.mqtt.subscribers.paho_mqtt_subscriber import PahoMQTTSubscriber
@@ -28,11 +28,10 @@ class Subscriber:
         self._mqtt.register_on_message(self.on_message)
 
     def on_message(self, data: MQTTOnMessage):
-        start_time = time.perf_counter()
-        logger.info(f"Message received: {data.msg.payload}")
-        end_time = time.perf_counter()
+        with TimeMeasurement() as time_spent:
+            logger.info(f"Message received: {data.msg.payload}")
 
-        self._collect_time_spent(end_time - start_time)
+        self._collect_time_spent(time_spent())
 
     def on_connect(self, data: MQTTOnConnect):
         logger.info(f"Connection Status: {data.reason_code}")

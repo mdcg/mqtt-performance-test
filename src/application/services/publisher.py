@@ -1,10 +1,10 @@
-import time
 from typing import Optional
 
 from src.domain.entities.metrics.parameters.time_series_data import TimeSeriesData
 from src.domain.entities.mqtt.parameters.mqtt_on_publish import MQTTOnPublish
 from src.domain.interfaces.metrics.time_series_database import TimeSeriesDatabase
 from src.domain.interfaces.mqtt.mqtt_publisher import MQTTPublisher
+from src.infrastructure.common.time_measurement import TimeMeasurement
 from src.infrastructure.logging import Logger
 from src.infrastructure.metrics.influxdb import InfluxDB
 from src.infrastructure.mqtt.publishers.paho_mqtt_publisher import PahoMQTTPublisher
@@ -46,11 +46,10 @@ class Publisher:
             )
 
     def publish(self, message: str):
-        start_time = time.perf_counter()
-        self._mqtt.publish(message)
-        end_time = time.perf_counter()
+        with TimeMeasurement() as time_spent:
+            self._mqtt.publish(message)
 
-        self._collect_time_spent(end_time - start_time)
+        self._collect_time_spent(time_spent())
         logger.info(f"Message sent: {message}")
 
     def _collect_time_spent(self, total_time: float):
