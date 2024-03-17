@@ -5,20 +5,13 @@ services:
     build: 
       context: .
       dockerfile: dockerfiles/broker.Dockerfile
-    ports:
-      - "1883:1883"
-      - "9001:9001"
+    network_mode: host
     restart: unless-stopped
   influxdb:
     container_name: influxdb
     build: 
       context: .
       dockerfile: dockerfiles/influxdb.Dockerfile
+    network_mode: host
     env_file:
       - config/.env
-    ports:
-    - "8086:8086"
-
-networks:
-  default:
-    name: mqtt5-network

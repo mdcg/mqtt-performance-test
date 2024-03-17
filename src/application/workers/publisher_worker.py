@@ -1,9 +1,10 @@
+import uuid
+from random import randint
 from time import sleep
 
 from src.application.services.publisher import Publisher
-from src.infrastructure.logging import Logger
 from src.infrastructure.common.csv import CSV
-from json import dumps
+from src.infrastructure.logging import Logger
 
 logger = Logger("Publisher Worker")
 
@@ -15,9 +16,8 @@ def main():
 
     try:
         while True:
-            sleep(1)
-            for row in csv.read():
-                pub.publish(dumps(row))
+            sleep(randint(1, 5))
+            pub.publish(str(uuid.uuid4()))
     except KeyboardInterrupt:
         pub.stop()
 
