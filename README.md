@@ -43,3 +43,7 @@ make start/publisher-worker
 ## Acessando as métricas
 
 Para acessar o InfluxDB e verificar as métricas do publisher e do subscriber, abra o navegador e acesse [http://localhost:8086/](http://localhost:8086/). Será solicitado as credenciais de autenticação, estas por sua vez podem ser encontradas no arquivo `config/.env` (**INFLUXDB_USERNAME** e **INFLUXDB_PASSWORD**). No menu lateral acesse "Explore" e filtre as métricas como desejar.
+
+## Referências
+
+* [Python MQTT Tutorial: Store IoT Metrics with InfluxDB](https://www.influxdata.com/blog/python-mqtt-tutorial-store-iot-metrics-influxdb/)
